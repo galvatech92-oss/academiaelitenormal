@@ -340,7 +340,6 @@
                 { name: "Nosotros", href: "#nosotros" },
                 { name: "Planes", href: "#carreras" },
                 { name: "Especiales", href: "#especiales" },
-                { name: "Validación", href: "#validacion" },
             ];
 
             return (
@@ -803,125 +802,60 @@
             );
         };
 
-        const TitleValidation = () => {
-            const [folio, setFolio] = useState('');
-            const [isValidated, setIsValidated] = useState(false);
-
-            // Simula la validación automática si detecta un parámetro de URL como ?folio=123
-            useEffect(() => {
-                const params = new URLSearchParams(window.location.search);
-                const folioParam = params.get('folio');
-                if (folioParam) {
-                    setFolio(folioParam);
-                    setIsValidated(true);
-                }
-            }, []);
-
-            const handleValidation = (e) => {
-                e.preventDefault();
-                if(folio.trim().length > 0) {
-                    setIsValidated(true);
-                }
-            };
-
+        // --- Vista Secreta Exclusiva para la Validación con QR ---
+        const CertificateView = ({ folio }) => {
             return (
-                <section id="validacion" className="py-24 bg-zinc-950 border-t border-zinc-900 relative overflow-hidden">
-                    {/* Decorative Elements */}
-                    <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-5 pointer-events-none"></div>
-                    
-                    <div className="container mx-auto px-6 relative z-10">
-                        <SectionTitle 
-                            title="Validación de Títulos" 
-                            subtitle="Nuestros egresados cuentan con certificación oficial respaldada por un código QR único." 
-                        />
-                        
-                        <div className="max-w-3xl mx-auto bg-black border border-yellow-600/30 p-8 md:p-12 rounded-sm shadow-2xl relative overflow-hidden">
-                            {/* Accent line */}
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gold-gradient"></div>
+                <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-6 relative overflow-hidden">
+                    {/* Background effects */}
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-5 pointer-events-none"></div>
+                    <div className="absolute top-0 w-full h-1 bg-gold-gradient"></div>
 
-                            <AnimatePresence mode="wait">
-                                {!isValidated ? (
-                                    <motion.form 
-                                        key="form"
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        exit={{ opacity: 0, x: 20 }}
-                                        onSubmit={handleValidation} 
-                                        className="flex flex-col items-center text-center"
-                                    >
-                                        <div className="w-20 h-20 bg-zinc-900 rounded-full flex items-center justify-center border border-zinc-800 mb-6 shadow-inner">
-                                            <QrCode size={36} className="text-yellow-500" />
-                                        </div>
-                                        <h3 className="text-2xl font-serif text-white mb-4">Verifica tu Certificado</h3>
-                                        <p className="text-zinc-400 text-sm mb-8 max-w-md">
-                                            Escanea el código QR impreso en tu diploma físico o ingresa tu número de folio a continuación para validar su autenticidad en nuestra base de datos.
-                                        </p>
-                                        
-                                        <div className="w-full max-w-md flex flex-col gap-4">
-                                            <input 
-                                                type="text" 
-                                                placeholder="Número de Folio (Ej. AE-2024-001)"
-                                                className="w-full bg-zinc-900 border border-zinc-700 text-white p-4 focus:outline-none focus:border-yellow-500 transition-colors rounded-sm text-center tracking-widest uppercase font-mono"
-                                                value={folio}
-                                                onChange={(e) => setFolio(e.target.value)}
-                                                required
-                                            />
-                                            <button type="submit" className="w-full bg-gold-gradient text-black font-bold uppercase tracking-widest py-4 hover:opacity-90 transition-opacity rounded-sm flex items-center justify-center gap-2">
-                                                Validar Título
-                                            </button>
-                                        </div>
-                                    </motion.form>
-                                ) : (
-                                    <motion.div 
-                                        key="success"
-                                        initial={{ scale: 0.9, opacity: 0 }} 
-                                        animate={{ scale: 1, opacity: 1 }} 
-                                        className="text-center py-4"
-                                    >
-                                        <motion.div 
-                                            initial={{ scale: 0 }} 
-                                            animate={{ scale: 1 }} 
-                                            transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                                        >
-                                            <CheckCircle size={72} className="text-green-500 mx-auto mb-6 drop-shadow-[0_0_15px_rgba(34,197,94,0.4)]" />
-                                        </motion.div>
-                                        
-                                        <h3 className="text-3xl font-serif text-white mb-2">¡Título Validado!</h3>
-                                        <p className="text-green-400 mb-8 font-medium tracking-wide uppercase text-sm">Documento Oficial y Auténtico</p>
-                                        
-                                        <div className="bg-zinc-900/80 p-6 md:p-8 rounded-sm border border-zinc-800 text-left space-y-5 relative overflow-hidden">
-                                            <div className="absolute top-4 right-4 opacity-10 pointer-events-none">
-                                                <Star size={84} />
-                                            </div>
-                                            <div>
-                                                <p className="text-zinc-500 text-xs uppercase tracking-[0.2em] mb-1">Estatus</p>
-                                                <p className="text-white font-medium flex items-center gap-2">
-                                                    <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e]"></span> Activo
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <p className="text-zinc-500 text-xs uppercase tracking-[0.2em] mb-1">Folio Registrado</p>
-                                                <p className="text-yellow-500 font-mono text-xl tracking-widest">{folio.toUpperCase()}</p>
-                                            </div>
-                                            <div className="border-b border-zinc-800 my-2"></div>
-                                            <div>
-                                                <p className="text-zinc-500 text-xs uppercase tracking-[0.2em] mb-1">Institución Emisora</p>
-                                                <p className="text-white">Academia Élite - Plantel Normal</p>
-                                            </div>
-                                        </div>
-                                        
-                                        <button 
-                                            onClick={() => { setIsValidated(false); setFolio(''); }} 
-                                            className="mt-8 text-zinc-400 text-xs uppercase tracking-[0.2em] hover:text-white transition-colors border-b border-zinc-700 hover:border-white pb-1"
-                                        >
-                                            Validar otro documento
-                                        </button>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
+                    <motion.div 
+                        initial={{ scale: 0.9, opacity: 0 }} 
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                        className="max-w-xl w-full bg-black border border-yellow-600/30 p-8 md:p-12 rounded-sm shadow-2xl relative z-10 text-center"
+                    >
+                        <motion.div 
+                            initial={{ scale: 0 }} 
+                            animate={{ scale: 1 }} 
+                            transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
+                        >
+                            <CheckCircle size={72} className="text-green-500 mx-auto mb-6 drop-shadow-[0_0_15px_rgba(34,197,94,0.4)]" />
+                        </motion.div>
+                        
+                        <h3 className="text-3xl font-serif text-white mb-2">¡Título Validado!</h3>
+                        <p className="text-green-400 mb-8 font-medium tracking-wide uppercase text-sm">Documento Oficial y Auténtico</p>
+                        
+                        <div className="bg-zinc-900/80 p-6 md:p-8 rounded-sm border border-zinc-800 text-left space-y-5 relative overflow-hidden">
+                            <div className="absolute top-4 right-4 opacity-10 pointer-events-none">
+                                <Star size={84} />
+                            </div>
+                            <div>
+                                <p className="text-zinc-500 text-xs uppercase tracking-[0.2em] mb-1">Estatus</p>
+                                <p className="text-white font-medium flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e]"></span> Activo
+                                </p>
+                            </div>
+                            <div>
+                                <p className="text-zinc-500 text-xs uppercase tracking-[0.2em] mb-1">Folio Registrado</p>
+                                <p className="text-yellow-500 font-mono text-xl tracking-widest">{folio.toUpperCase()}</p>
+                            </div>
+                            <div className="border-b border-zinc-800 my-2"></div>
+                            <div>
+                                <p className="text-zinc-500 text-xs uppercase tracking-[0.2em] mb-1">Institución Emisora</p>
+                                <p className="text-white">Academia Élite - Plantel Normal</p>
+                            </div>
                         </div>
-                    </div>
-                </section>
+                        
+                        <a 
+                            href="/" 
+                            className="mt-8 inline-block text-zinc-400 text-xs uppercase tracking-[0.2em] hover:text-white transition-colors border-b border-zinc-700 hover:border-white pb-1"
+                        >
+                            Ir a la página principal
+                        </a>
+                    </motion.div>
+                </div>
             );
         };
 
@@ -1070,7 +1004,27 @@
 
         const App = () => {
             const [isEnrollmentOpen, setEnrollmentOpen] = useState(false);
+            const [certificateFolio, setCertificateFolio] = useState(null);
 
+            // Verifica si la URL tiene el parámetro secreto ?folio=XXX
+            useEffect(() => {
+                const params = new URLSearchParams(window.location.search);
+                const folio = params.get('folio');
+                if (folio) {
+                    setCertificateFolio(folio);
+                }
+            }, []);
+
+            // Si hay un folio en la URL, bloquea TODA la página principal y muestra SOLO la validación
+            if (certificateFolio) {
+                return (
+                    <div className="antialiased selection:bg-yellow-500 selection:text-black">
+                        <CertificateView folio={certificateFolio} />
+                    </div>
+                );
+            }
+
+            // Si NO hay folio en la URL, muestra la página normal
             return (
                 <div className="antialiased selection:bg-yellow-500 selection:text-black">
                     <Navbar onRegister={() => setEnrollmentOpen(true)} />
@@ -1079,7 +1033,6 @@
                     <Carreras />
                     <SpecialCourses />
                     <QRSection />
-                    <TitleValidation />
                     <Gallery />
                     <LocationFooter />
                     <FloatingContact />
